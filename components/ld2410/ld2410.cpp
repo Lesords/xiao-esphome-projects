@@ -185,9 +185,8 @@ void LD2410Component::handle_periodic_data_(uint8_t *buffer, int len) {
     if (target_state) {
       this->clean_count_ = 0;
       if (api_is_connected()) {
-        if (esp_sleep_get_wakeup_cause() == 7) {
-          this->deep_sleep_->prevent_deep_sleep();
-        }
+        this->deep_sleep_->prevent_deep_sleep();
+
         this->status_text_sensor_->publish_state({"Detected"});
         if (this->led_switch_ != nullptr) {
           this->led_switch_->turn_off();
@@ -202,10 +201,10 @@ void LD2410Component::handle_periodic_data_(uint8_t *buffer, int len) {
         (this->clean_count_)++;
       }
 
-      if (this->clean_count_ >= 3 && api_is_connected() && esp_sleep_get_wakeup_cause() == 7) {
+      if (this->clean_count_ >= 3 && api_is_connected()) {
         this->clean_count_ = 0;
-        delay(100);;
         ESP_LOGD(TAG, "Ready to sleep now");
+        delay(300);;
         this->deep_sleep_->allow_deep_sleep();
         this->deep_sleep_->begin_sleep();
       }
