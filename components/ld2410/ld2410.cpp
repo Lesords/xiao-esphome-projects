@@ -204,8 +204,8 @@ void LD2410Component::handle_periodic_data_(uint8_t *buffer, int len) {
 
       if (this->clean_count_ >= 3 && api_is_connected() && esp_sleep_get_wakeup_cause() == 7) {
         this->clean_count_ = 0;
-        delay(100);;
         ESP_LOGD(TAG, "Ready to sleep now");
+        delay(1000);
         this->deep_sleep_->allow_deep_sleep();
         this->deep_sleep_->begin_sleep();
       }
